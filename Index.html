@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css"
+    integrity="sha512-SgaqKKxJDQ/tAUAAXzvxZz33rmn7leYDYfBP+YoMRSENhf3zJyx3SBASt/OfeQwBHA1nxMis7mM3EV/oYT6Fdw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.2/wavesurfer.min.js"></script>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <title>Royality-Free Voices</title>
+  <style>
+    * {
+      padding: 1px;
+    }
+
+    .Box-A,
+    .Box-B {
+      background-color: #1e1e1e;
+    }
+
+    .Box-A:hover,
+    .Box-B:hover {
+      background-color: skyblue;
+      cursor: pointer;
+    }
+
+    .Hide {
+      display: none;
+    }
+
+    .form-select,
+    .form-range {
+      background-color: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body style="background-color: black">
+  <div id="Body" class="bg-[#0c0c0c] rounded-5">
+    <section id="A" class="m-1 rounded-sm " style="background-color: #121212">
+      <h3 class="text-white text-center">VOICE INPUT</h3>
+      <p class="text-secondary text-center">
+        Upload or record a clean acapella vocal with little to no background
+        noise.
+      </p>
+
+      <div class="d-flex justify-content-between p-4" style="gap: 10px">
+        <div class="Box-A w-50 rounded-1 d-flex flex-column align-items-center text-center p-4" onclick="selectAudio()">
+          <input type="file" id="audioFile" accept="audio/*" style="display: none" />
+          <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="white" class="bi bi-cloud-upload-fill"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0zm-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0z" />
+          </svg>
+
+          <h6 class="text-white">Add or drop acapella</h6>
+          <small class="text-secondary">Upload .wav &amp; .mp3 up to 40mb</small>
+        </div>
+        <div class="Box-B w-50 rounded-1 d-flex flex-column align-items-center text-center p-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" fill="red" class="bi bi-record2"
+            viewBox="0 0 16 16">
+            <path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1A5 5 0 1 0 8 3a5 5 0 0 0 0 10z" />
+            <path d="M10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+          </svg>
+
+          <h6 class="text-white R1">Click to record</h6>
+          <small class="text-secondary">Requires microphone access</small>
+        </div>
+      </div>
+      <!-- =============== -->
+
+      <div class="Audio Hide p-4">
+        <div class="Cont d-flex justify-content-between align-items-center m-1 w-100">
+          <section style="width: 20%">
+            <img
+              src="https://dsm01pap002files.storage.live.com/y4mV1RWAkpfoHiTdopm2Xlpdg4jD2u6jJb9r5yboJMaVn7FY3m1EMRyIVm1yjhupd8V1STWLIPWj8tBmmAQ7idXAe5jcYcFcXigEkcmrCxGuAJCUjZrI8wHiOl8KCf0nqxsL3EkMDuTUGPLo2krTOKso90jw5gpmNVPsxDvU4RHaaoKr6fOqEBJVK1T3y-n6dHL?width=100&height=100&cropmode=none"
+              alt="" style="height: 50px; width: 50px; filter: invert(1)" class="Player Play" />
+          </section>
+          <div id="waveform" style="width: 70%; justify-content: center"></div>
+
+          <section style="width: 10%">
+            <img
+              src="https://dsm01pap002files.storage.live.com/y4miEgHd9eOxWzerjyEesYA3NfUGLEmo_MMGPHhg-xPpGQ4UHMsjHOXo5dd8xe7SX1FvwnvWQxaGyAtRa9Y5Zd2x3HbzX3-C9NGbazKRqPdcDE7D8S9X90o8RK3m72EAbPVRgWW2NG9wOX4f9Ng-XD7aL7hlNUcB4X5NMeWI_HIAfHcZ6A5Mfty8ne4Z7YL_3Cc?width=96&height=96&cropmode=none"
+              alt="" style="height: 50px; width: 50px" class="Cancel" />
+          </section>
+        </div>
+      </div>
+
+      <div class="Advanced p-3">
+        <section class="d-flex justify-content-center align-items-center text-white rounded-sm"
+          style="background-color: #1e1e1e">
+          <h6 class="text-white m-0 p-3">VOICE SETTINGS</h6>
+        </section>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group p-3">
+                <label for="artist-dropdown" class="text-white">Select an artist:</label>
+                <select id="artist-dropdown" class="form-select w-100">
+                  	<option value="">Choose an artist</option>
+                  	
+					
+					
+					
+					
+					
+					
+					<option value="RichardVO">RichardVO</option>
+					
+					
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group p-3">
+                <label for="quality-dropdown" class="text-white">Output Quality:</label>
+                <select id="quality-dropdown" class="form-select w-100">
+                  <option value="">Choose a quality</option>
+                  <option value="pm">Good</option>
+                  <option value="harvest">HQ</option>
+                  <option value="crepe">Ultra HQ</option>
+                  <!-- Add more options as needed -->
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="element-group row Slider d-flex justify-content-between align-items-center p-4">
+          <table>
+            <tr>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td>
+                <label for="pitch-slider" class="text-white col-form-label">Set Voice Pitch:</label>
+              </td>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            </tr>
+          </table>
+
+          <input type="range" id="pitch-slider" class="form-range" min="-12" max="12" value="0" step="1"
+            style="flex: 1; margin-right: 15px" />
+          <span id="slider-value" class="col-2 text-white" style="font-weight: bold">0</span>
+          <div class="col-12 text-center">
+            <h6 class="text-white">Adjust the pitch of your AI singer</h6>
+          </div>
+        </div>
+
+        <div style="
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+" class="p-4">
+          <button style="margin-right: 220px" class="btn btn-outline-light rounded-sm" onclick="Reset()">
+            Reset Audio
+          </button>
+          <button class="btn btn-outline-light rounded-sm wider" onclick="Convert()" style="width: 120px">
+            Convert
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Output -->
+
+    <section id="B" class="m-1 rounded-sm" style="background-color: #121212">
+      <div class="text-center">
+        <h3 class="text-white">VOICE OUTPUT</h3>
+      </div>
+
+      <div class="View">
+        <section class="Frame">
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="white" class="bi bi-mic-fill"
+              viewBox="0 0 16 16">
+              <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+              <path
+                d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+            </svg>
+
+            <p class="text-secondary">
+              Your vocal conversions will appear here
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div class="Audio2 Hide">
+        <div class="loading-indicator">
+          <div class="d-flex justify-content-center align-items-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden"></span>
+          </div>
+        </div>
+        </div>
+
+        <input type="file" id="audioFile2" accept="audio/*" class="d-none" style="display: none" />
+        <div class="Cont d-flex justify-content-between align-items-center m-1 w-100" style=" border-radius: 5px">
+          <section style="width: 20%">
+            <img
+              src="https://dsm01pap002files.storage.live.com/y4mV1RWAkpfoHiTdopm2Xlpdg4jD2u6jJb9r5yboJMaVn7FY3m1EMRyIVm1yjhupd8V1STWLIPWj8tBmmAQ7idXAe5jcYcFcXigEkcmrCxGuAJCUjZrI8wHiOl8KCf0nqxsL3EkMDuTUGPLo2krTOKso90jw5gpmNVPsxDvU4RHaaoKr6fOqEBJVK1T3y-n6dHL?width=100&height=100&cropmode=none"
+              alt="" style="height: 50px; width: 50px; filter: invert(1)" class="Player2 Play2" />
+          </section>
+
+          <div id="waveform2" style="width: 70%; justify-content: center"></div>
+
+          <section style="width: 10%">
+            <img
+              src="https://dsm01pap002files.storage.live.com/y4mnMprc970l4yR0P2ti2fSbvFljNxH8yWNZJ4EFte8TO3g3mnSA0vu3SiyunTaef8vDXms3qoGnpdgJBDNflCMtBWI_HORc8M6c4VVGPRxDyO-kvJIhv4KFR6rUvx9dTd2jvOQalCZer5PKHmgnbh_Gd3nZnhxnmS5--Jm_dn-DgPVTZoXGQK2Vx7Eid7vh_Tr?width=100&height=100&cropmode=none"
+              alt="" style="height: 50px; width: 50px; filter: invert(1)" class="Download" />
+          </section>
+        </div>
+
+
+      </div>
+    </section>
+  </div>
+  <script>
+    const slider = document.getElementById("pitch-slider");
+    const sliderValue = document.getElementById("slider-value");
+
+    // Update the slider value when it changes
+    slider.addEventListener("input", function () {
+      sliderValue.textContent = slider.value;
+    });
+    let Control = document.getElementsByClassName("Advanced");
+    let Plus = document.getElementsByClassName("fa-plus");
+    let Setting = document.getElementsByClassName("Settings");
+    let Audio = document.getElementsByClassName("Audio");
+    let Cancel = document.getElementsByClassName("Cancel");
+    let Record = document.getElementsByClassName("Box-B");
+
+    let Audio2 = document.getElementsByClassName("Audio2");
+    let Download = document.getElementsByClassName("Download");
+    let Player2 = document.getElementsByClassName("Player2");
+    let View = document.getElementsByClassName("View");
+    let RButton = document.getElementsByClassName("R1");
+
+    Control[0].addEventListener("click", function () { });
+
+    function selectAudio() {
+      var audioFileInput = document.getElementById("audioFile");
+
+      if (audioFileInput.files.length > 0) {
+        var fileSize = audioFileInput.files[0].size; // File size in bytes
+        var maxSize = 40 * 1024 * 1024; // Maximum file size in bytes (15 MB)
+
+        console.log("File size:", fileSize);
+
+        if (fileSize > maxSize) {
+          alert("File size must be less than 40 MB.");
+          document.getElementById("audioFile").value = null;
+          return;
+        }
+      }
+
+      audioFileInput.click();
+    }
+
+    var wavesurfer;
+    var wavesurfer2;
+
+    function loadAudio() {
+      var audioFile = document.getElementById("audioFile").files[0];
+      var audioFileInput = document.getElementById("audioFile");
+
+      if (audioFileInput.files.length > 0) {
+        var fileSize = audioFileInput.files[0].size; // File size in bytes
+        var maxSize = 40 * 1024 * 1024; // Maximum file size in bytes (15 MB)
+
+        console.log("File size:", fileSize);
+
+        if (fileSize > maxSize) {
+          alert("File size must be less than 40 MB.");
+          document.getElementById("audioFile").value = null;
+          return;
+        }
+      }
+
+      if (audioFile) {
+        if (fileSize <= maxSize) {
+          if (wavesurfer) {
+            wavesurfer.destroy();
+          }
+          if (Audio[0].classList.contains("Hide")) {
+            Audio[0].classList.remove("Hide");
+          } else
+            if (!Audio[0].classList.contains("Hide")) {
+              Audio[0].classList.add("Hide");
+              document.getElementById("audioFile").value = null;
+            }
+
+          wavesurfer = WaveSurfer.create({
+            container: "#waveform",
+            waveColor: "#2ecc71",
+            progressColor: "#27ae60",
+            height: 80,
+            border: 0,
+            barWidth: 5,
+            barGap: 5,
+            barRadius: 5,
+          });
+
+          wavesurfer.load(URL.createObjectURL(audioFile));
+
+        }
+
+      }
+    }
+
+
+    document
+      .getElementById("audioFile")
+      .addEventListener("change", function () {
+        loadAudio();
+
+      });
+
+    let Player = document.getElementsByClassName("Player");
+
+    Player[0].addEventListener("click", function () {
+      if (Player[0].classList.contains("Play")) {
+        Player[0].classList.add("Pause");
+        Player[0].src =
+          "https://dsm01pap002files.storage.live.com/y4mgC8bIFU-r-eYVxaFg2oIjoGPjI061gnCO5_4JhFjcJzwExgRv5YYiVXKCLnLHYvAkN0HRsok7KlH7VoplYD5VQxyWZ3m_AyCIdKMZzid1hHJeCXznd3zRxpnGYcwH7BMd5sWRJaHnplbGL2rbhomO4iouqFZ8PGzihGZt0dQTS1Beyo2oyxwBPN9I54ZVPJP?width=100&height=100&cropmode=none";
+        Player[0].classList.remove("Play");
+        wavesurfer.play();
+
+        wavesurfer.on("finish", function () {
+          Player[0].src =
+            "https://dsm01pap002files.storage.live.com/y4mV1RWAkpfoHiTdopm2Xlpdg4jD2u6jJb9r5yboJMaVn7FY3m1EMRyIVm1yjhupd8V1STWLIPWj8tBmmAQ7idXAe5jcYcFcXigEkcmrCxGuAJCUjZrI8wHiOl8KCf0nqxsL3EkMDuTUGPLo2krTOKso90jw5gpmNVPsxDvU4RHaaoKr6fOqEBJVK1T3y-n6dHL?width=100&height=100&cropmode=none";
+        });
+      } else if (Player[0].classList.contains("Pause")) {
+        Player[0].classList.add("Play");
+        Player[0].src =
+          "https://dsm01pap002files.storage.live.com/y4mV1RWAkpfoHiTdopm2Xlpdg4jD2u6jJb9r5yboJMaVn7FY3m1EMRyIVm1yjhupd8V1STWLIPWj8tBmmAQ7idXAe5jcYcFcXigEkcmrCxGuAJCUjZrI8wHiOl8KCf0nqxsL3EkMDuTUGPLo2krTOKso90jw5gpmNVPsxDvU4RHaaoKr6fOqEBJVK1T3y-n6dHL?width=100&height=100&cropmode=none";
+        Player[0].classList.remove("Pause");
+        wavesurfer.pause();
+      }
+    });
+    Player2[0].addEventListener("click", function () {
+      if (Player2[0].classList.contains("Play2")) {
+        Player2[0].classList.add("Pause2");
+        Player2[0].src =
+          "https://dsm01pap002files.storage.live.com/y4mgC8bIFU-r-eYVxaFg2oIjoGPjI061gnCO5_4JhFjcJzwExgRv5YYiVXKCLnLHYvAkN0HRsok7KlH7VoplYD5VQxyWZ3m_AyCIdKMZzid1hHJeCXznd3zRxpnGYcwH7BMd5sWRJaHnplbGL2rbhomO4iouqFZ8PGzihGZt0dQTS1Beyo2oyxwBPN9I54ZVPJP?width=100&height=100&cropmode=none";
+        Player2[0].classList.remove("Play2");
+        wavesurfer2.play();
+
+        wavesurfer2.on("finish", function () {
+          Player2[0].src =
+            "https://dsm01pap002files.storage.live.com/y4mV1RWAkpfoHiTdopm2Xlpdg4jD2u6jJb9r5yboJMaVn7FY3m1EMRyIVm1yjhupd8V1STWLIPWj8tBmmAQ7idXAe5jcYcFcXigEkcmrCxGuAJCUjZrI8wHiOl8KCf0nqxsL3EkMDuTUGPLo2krTOKso90jw5gpmNVPsxDvU4RHaaoKr6fOqEBJVK1T3y-n6dHL?width=100&height=100&cropmode=none";
+        });
+      } else if (Player2[0].classList.contains("Pause2")) {
+        Player2[0].classList.add("Play2");
+        Player2[0].src =
+          "https://dsm01pap002files.storage.live.com/y4mV1RWAkpfoHiTdopm2Xlpdg4jD2u6jJb9r5yboJMaVn7FY3m1EMRyIVm1yjhupd8V1STWLIPWj8tBmmAQ7idXAe5jcYcFcXigEkcmrCxGuAJCUjZrI8wHiOl8KCf0nqxsL3EkMDuTUGPLo2krTOKso90jw5gpmNVPsxDvU4RHaaoKr6fOqEBJVK1T3y-n6dHL?width=100&height=100&cropmode=none";
+        Player2[0].classList.remove("Pause2");
+        wavesurfer2.pause();
+      }
+    });
+
+    Cancel[0].addEventListener("click", function () {
+      if (Audio[0].classList.contains("Hide")) {
+        Audio[0].classList.remove("Hide");
+      } else if (!Audio[0].classList.contains("Hide")) {
+        Audio[0].classList.add("Hide");
+        document.getElementById("audioFile").value = null;
+      }
+    });
+
+    function loadAudio2() {
+      var audioFile = document.getElementById("audioFile").files[0];
+
+      if (audioFile) {
+        if (wavesurfer) {
+          wavesurfer.destroy();
+        }
+
+        if (Audio[0].classList.contains("Hide")) {
+          Audio[0].classList.remove("Hide");
+        }
+
+        wavesurfer = WaveSurfer.create({
+          container: "#waveform",
+          waveColor: "#2ecc71",
+          progressColor: "#27ae60",
+          height: 80,
+          border: 0,
+
+          barWidth: 5,
+          barGap: 5,
+          barRadius: 5,
+        });
+
+        wavesurfer.load(URL.createObjectURL(audioFile));
+      }
+    }
+
+    let mediaRecorder,
+      chunks = [],
+      audioURL = "";
+
+    Record[0].addEventListener("click", () => {
+      if (!Record[0].classList.contains("Start")) {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({
+              audio: true,
+            })
+            .then((stream) => {
+              mediaRecorder = new MediaRecorder(stream);
+
+              mediaRecorder.ondataavailable = (e) => {
+                chunks.push(e.data);
+              };
+              mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, {
+                  type: "audio/ogg; codecs=opus",
+                });
+                chunks = [];
+                audioURL = window.URL.createObjectURL(blob);
+
+                const file = new File([blob], "audio.ogg", {
+                  type: "audio/ogg",
+                });
+
+                const fileList = new DataTransfer();
+                fileList.items.add(file);
+                const inputElement = document.getElementById("audioFile");
+                inputElement.files = fileList.files;
+
+                // if (Audio[0].classList.contains("Hide")) {
+                //   Audio[0].classList.remove("Hide");
+                // } else if (!Audio[0].classList.contains("Hide")) {
+                //   Audio[0].classList.add("Hide");
+                //   document.getElementById("audioFile").value = null;
+                // }
+
+                if (stream) {
+                  stream.getTracks().forEach(function (track) {
+                    track.stop();
+                  });
+                }
+
+                loadAudio2();
+              };
+
+              mediaRecorder.start();
+
+              // mediaRecorder.onstop = () => {
+              //   const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+              //   chunks = [];
+              //   audioURL = window.URL.createObjectURL(blob);
+              //   document.getElementById("audioFile").src = audioURL;
+              //   alert(audioURL)
+              //   mediaRecorder.stop();
+              // };
+            })
+            .catch((error) => {
+              console.log("Following error has occured : ", error);
+            });
+        }
+        Record[0].classList.add("Start");
+        RButton[0].innerHTML = "Click to stop recording";
+        // mediaRecorder.start();
+      } else {
+        Record[0].classList.remove("Start");
+        mediaRecorder.stop();
+        RButton[0].innerHTML = "Click to record";
+      }
+    });
+    //     function Reset() {
+    //   document.getElementById("artist-dropdown").selectedIndex = -1;
+    //   document.getElementById("quality-dropdown").selectedIndex = -1;
+    //   document.getElementById("pitch-slider").value = 0;
+    //   document.getElementById("audioFile").value = null;
+    //   document.getElementById("download-link").style.display = "none";
+    //   document.getElementById("promptElement").textContent = "API response:";
+    // }
+
+    function Reset() {
+      Audio[0].classList.add("Hide");
+      document.getElementById("audioFile").value = null;
+      document.getElementById("artist-dropdown").selectedIndex = 0;
+      document.getElementById("quality-dropdown").selectedIndex = 0;
+      document.getElementById("pitch-slider").value = 0;
+      document.getElementById("slider-value").innerText = "0";
+    }
+
+
+    async function Convert() {
+      var Artist = document.getElementById("artist-dropdown").value;
+      var Quality = document.getElementById("quality-dropdown").value;
+      var Pitch = parseInt(document.getElementById("pitch-slider").value);
+      var File = document.getElementById("audioFile").files[0];
+
+      if (Artist && Quality  && File) {
+        // ===================================
+
+        // ===================================
+        
+        var audioFile = document.getElementById("audioFile").files[0];
+        if (audioFile) {
+          //View[0].classList.add("Hide");
+          Audio2[0].classList.remove("Hide");
+        } else {
+          View[0].classList.remove("Hide");
+          Audio2[0].classList.add("Hide");
+        }
+
+
+        if (audioFile) {
+          if (wavesurfer2) {
+            wavesurfer2.destroy();
+          }
+
+          wavesurfer2 = WaveSurfer.create({
+            container: "#waveform2",
+            waveColor: "#2ecc71",
+            progressColor: "#27ae60",
+            height: 80,
+            border: 0,
+
+            barWidth: 5,
+            barGap: 5,
+            barRadius: 5,
+          });
+
+          var loadingIndicator = document.querySelector(".loading-indicator");
+          loadingIndicator.style.display = "block";
+          var apiUrl = "https://149.28.57.22:80/convert";
+          var formData = new FormData();
+          formData.append("pitch", Pitch);
+          formData.append("model", Artist);
+          formData.append("method", Quality);
+          formData.append("creep_value", 0);
+          formData.append("file", audioFile);
+
+          const response = await fetch(apiUrl, {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          body: formData,
+          });
+          console.log("The response is received");
+          const data = await response.json();
+
+          var result = data;
+          var audioOptBase64 = result.audio_opt;
+          var message = result.message;
+
+
+          var binaryData = atob(audioOptBase64);
+          var byteArray = new Uint8Array(binaryData.length);
+          for (var i = 0; i < binaryData.length; i++) {
+            byteArray[i] = binaryData.charCodeAt(i);
+          }
+          var audioOptBlob = new Blob([byteArray], { type: "audio/wav" });
+          //hidi;ng loading bar
+          loadingIndicator.style.display = "none";
+		  View[0].classList.add("Hide");//hiding the statement you vocal will display here
+          
+          wavesurfer2.load(URL.createObjectURL(audioOptBlob));
+          const downloadButton = document.getElementsByClassName("Download");
+
+            downloadButton[0].addEventListener("click", function () {
+              const audioSrc = URL.createObjectURL(audioOptBlob);
+              const downloadLink = document.createElement("a");
+              downloadLink.href = audioSrc;
+              downloadLink.download = "Ai Audio.mp3";
+              downloadLink.click();
+            })
+
+          // wavesurfer2.on("ready", function () {
+          //   window.prompt(hide);
+
+          //   // Hide the loading indicator
+          //   loadingIndicator.style.display = "none";
+          //   wavesurfer2.load(URL.createObjectURL(audioOptBlob));
+          //   const downloadButton = document.getElementsByClassName("Download");
+
+          //   downloadButton[0].addEventListener("click", function () {
+          //     const audioSrc = URL.createObjectURL(audioOptBlob);
+          //     const downloadLink = document.createElement("a");
+          //     downloadLink.href = audioSrc;
+          //     downloadLink.download = "Ai Audio.mp3";
+          //     downloadLink.click();
+          //   })
+
+
+          // });
+
+
+        
+
+        
+
+
+        }
+
+        
+
+        
+
+        
+
+        // Reset();
+        //   =================================
+
+        
+      } else {
+        alert("Please Select All Fields");
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      let Blur = document.getElementsByClassName("B-A");
+      if (Blur.length > 0) {
+        Blur[0].addEventListener("click", function () {
+          document.getElementById("artist-dropdown").selectedIndex = -1;
+          document.getElementById("quality-dropdown").selectedIndex = -1;
+          document.getElementById("pitch-slider").selectedIndex = -1;
+          document.getElementById("audioFile").value = null;
+
+          if (!Audio[0].classList.contains("Hide")) {
+            Audio[0].classList.add("Hide");
+          }
+          document.getElementById("audioFile").value = null;
+          // Reset();
+        });
+      }
+    });
+
+      // ===========================
+  </script>
+</body>
+
+</html>
